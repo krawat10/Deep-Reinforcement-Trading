@@ -3,7 +3,7 @@
   <h3 align="center">Trading Bot Algorithm</h3>
 
   <p align="center">
-    Deep Reinforcement Learning Trading Bot that uses Double Deep Q-Learning Algorithm
+    Deep Reinforcement Learning Trading Bot that uses Double Deep Q-Learning Algorithm + Description in Master Thesis 
   </p>
 </div>
 
