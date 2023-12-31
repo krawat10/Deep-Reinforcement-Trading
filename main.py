@@ -1,17 +1,15 @@
 import os
-from datetime import date, timedelta
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU
+os.environ['TF_ENABLE_MLIR_OPTIMIZATIONS'] = '1'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 from enum import Enum
 
-from alpaca.trading import OrderSide, TimeInForce
-from alpaca.trading.client import TradingClient
-from alpaca.trading.requests import GetAssetsRequest, MarketOrderRequest
-from Plotter import Plotter
-from Simulator import Simulator
-from Models.SimulatorProperties import SimulatorPropertiesBuilder
-from Models.DQNAgentType import DQNAgentType
-from Models.DecisionMakingPolicy import DecisionMakingPolicy
-from TradingClient import TradingManager
-
+from Utils.Plotter import Plotter
+from AI.Simulator import Simulator
+from AI.Models.SimulatorProperties import SimulatorPropertiesBuilder
+from AI.Models.DQNAgentType import DQNAgentType
+from AI.Models.DecisionMakingPolicy import DecisionMakingPolicy
+from Services.TradingClient import TradingManager
 
 class Mode(Enum):
     RUN_NEW_SIMULATION = 1
@@ -21,13 +19,15 @@ class Mode(Enum):
 
 
 # mode = Mode.RUN_EXISTING_NETWORK
-mode = Mode.RUN_NEW_SIMULATION
-#mode = Mode.RUN_SINGLE_DAY_PREDICTION
+# mode = Mode.RUN_NEW_SIMULATION
+mode = Mode.RUN_SINGLE_DAY_PREDICTION
 # mode = Mode.PLOT_HISTOGRAMS
 
 shutdown_after_simulation = False  # Turn off after simulation (it takes some time)
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
+
+
+
 if mode == Mode.RUN_NEW_SIMULATION:
     builder = SimulatorPropertiesBuilder()
     builder.set_date_range('1999-01-01', '2020-01-01')

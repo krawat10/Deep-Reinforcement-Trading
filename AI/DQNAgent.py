@@ -5,16 +5,17 @@ from pathlib import Path
 from random import sample
 
 import numpy as np
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU
 import tensorflow as tf
 from keras import Sequential, models
 from keras.layers import Dense, Dropout
 from keras.optimizers import Adam
 from keras.regularizers import l2
-from tensorflow_addons.layers import NoisyDense
 
-from Models.DQNAgentType import DQNAgentType
-from Models.DecisionMakingPolicy import DecisionMakingPolicy
-from DropoutNoisy import DropoutNoisy
+from AI.Models.DQNAgentType import DQNAgentType
+from AI.Models.DecisionMakingPolicy import DecisionMakingPolicy
+from AI.DropoutNoisy import DropoutNoisy
 
 
 class DQNAgent:

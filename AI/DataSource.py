@@ -1,15 +1,15 @@
-from datetime import datetime, timedelta
-import json
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
-import talib
+from ta.momentum import StochasticOscillator, RSIIndicator
+from ta.trend import MACD
+from ta.volatility import AverageTrueRange
+from ta.volume import OnBalanceVolumeIndicator
 from sklearn.preprocessing import scale
-import matplotlib.pyplot as plt
 from ta import add_all_ta_features
 
-from FinancialmodelingprepProvider import FinancialmodelingprepProvider
-from YahooProvider import YahooProvider
+from Services.YahooProvider import YahooProvider
 
 
 class DataSource:
@@ -33,6 +33,12 @@ class DataSource:
         df = df[['open', 'high', 'low', 'close', 'volume']]
         print('got data for {}...'.format(self.ticker))
         return df
+
+    def ultimate_oscillator(self, high, low, close, periods=(7, 14, 28), weights=(1.0, 2.0, 3.0)):
+        bp = close - np.minimum(low, pd.Series(close).shift(1))
+        tr = np.maximum(high, pd.Series(close).shift(1)) - np.minimum(low, pd.Series(close).shift(1))
+        avg = [np.mean(bp[-i:]) / np.mean(tr[-i:]) for i in periods]
+        return (avg[0] * weights[0] + avg[1] * weights[1] + avg[2] * weights[2]) / sum(weights)
 
     def find_closest_trading_day(self, target_date):
         # Implement logic to find the closest previous trading day here
@@ -61,14 +67,20 @@ class DataSource:
         # self.data['vol_ret_5'] = self.data.volume.pct_change(5)
         # self.data['vol_ret_15'] = self.data.volume.pct_change(15)
 
-        data['rsi'] = talib.STOCHRSI(self.ohlc.close)[1]
-        data['macd'] = talib.MACD(self.ohlc.close)[1]
-        data['atr'] = talib.ATR(self.ohlc.high, self.ohlc.low, self.ohlc.close)
-        # data['obv'] = talib.OBV(self.ohlc.close, self.ohlc.volume)
-        slowk, slowd = talib.STOCH(self.ohlc.high, self.ohlc.low, self.ohlc.close)
+        # Initialize the indicators
+        rsi_indicator = RSIIndicator(close=self.ohlc.close)
+        macd_indicator = MACD(close=self.ohlc.close)
+        atr_indicator = AverageTrueRange(high=self.ohlc.high, low=self.ohlc.low, close=self.ohlc.close)
+        stoch_indicator = StochasticOscillator(high=self.ohlc.high, low=self.ohlc.low, close=self.ohlc.close)
+
+        # Calculate the indicators
+        data['rsi'] = rsi_indicator.rsi()
+        data['macd'] = macd_indicator.macd_signal()
+        data['atr'] = atr_indicator.average_true_range()
+        slowk = stoch_indicator.stoch()
+        slowd = stoch_indicator.stoch_signal()
         data['stoch'] = slowd - slowk
-        data['atr'] = talib.ATR(self.ohlc.high, self.ohlc.low, self.ohlc.close)
-        data['ultosc'] = talib.ULTOSC(self.ohlc.high, self.ohlc.low, self.ohlc.close)
+        data['ultosc'] = self.ultimate_oscillator(self.ohlc.high, self.ohlc.low, self.ohlc.close)
         data = (data.replace((np.inf, -np.inf), np.nan).dropna())
 
         if self.start_date == self.end_date:

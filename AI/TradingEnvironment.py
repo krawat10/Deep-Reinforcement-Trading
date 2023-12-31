@@ -1,11 +1,10 @@
 import gym
 from gym.utils import seeding
 
-from DataSource import DataSource
-from Models.StockProperties import StockProperties
-from TradingLogic import TradingLogic
+from AI.DataSource import DataSource
+from AI.Models.StockProperties import StockProperties
+from AI.TradingLogic import TradingLogic
 import numpy as np
-
 
 class TradingEnvironment(gym.Env):
     metadata = {'render.modes': ['human'], 'observation_space.names': []}

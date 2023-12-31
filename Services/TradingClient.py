@@ -7,7 +7,6 @@ from alpaca.trading.enums import OrderSide, TimeInForce
 
 from enum import Enum
 
-
 class OrderType(Enum):
     LONG = 'LONG'
     SHORT = 'SHORT'

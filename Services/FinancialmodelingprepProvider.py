@@ -8,7 +8,7 @@ class FinancialmodelingprepProvider:
     def __init__(
             self,
             url='https://financialmodelingprep.com/api/v3/historical-price-full'):
-        self.api_key = dotenv_values('.env')['API_KEY']
+        self.api_key = dotenv_values('../.env')['API_KEY']
         self.url = url
 
     def get_adj_price_in_range(self, ticker: str, start_date, end_date) -> pd.DataFrame:

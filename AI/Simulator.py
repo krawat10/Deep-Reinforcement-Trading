@@ -9,13 +9,12 @@ import tensorflow as tf
 from gym import Env
 from gym.envs.registration import register
 
-from DQNAgent import DQNAgent
-from DataSource import DataSource
-from Models.DQNProperties import DQNProperties
-from Models.SimulatorProperties import SimulatorProperties
-from Plotter import Plotter
-from TradingEnvironment import TradingEnvironment
-from utils import format_time
+from AI.DQNAgent import DQNAgent
+from AI.DataSource import DataSource
+from AI.Models.DQNProperties import DQNProperties
+from AI.Models.SimulatorProperties import SimulatorProperties
+from Utils.Plotter import Plotter
+from Utils.utils import format_time
 
 
 class Simulator:
@@ -85,10 +84,10 @@ class Simulator:
         tf.random.set_seed(42)
         sns.set_style('whitegrid')
 
-        # Set GPU device
-        gpu_devices = tf.config.list_physical_devices('GPU')
-        if len(gpu_devices) > 0:
-            tf.config.experimental.set_memory_growth(gpu_devices[0], True)
+        # # Set GPU device
+        # gpu_devices = tf.config.list_physical_devices('GPU')
+        # if len(gpu_devices) > 0:
+        #     tf.config.experimental.set_memory_growth(gpu_devices[0], True)
 
         tf.keras.backend.clear_session()
 
@@ -96,7 +95,7 @@ class Simulator:
         # Open AI environment
         register(
             id='trading-v1',
-            entry_point='TradingEnvironment:TradingEnvironment',
+            entry_point='AI.TradingEnvironment:TradingEnvironment',
             max_episode_steps=properties.trading_days
         )
 

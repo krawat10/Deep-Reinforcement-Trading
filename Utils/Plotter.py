@@ -15,9 +15,9 @@ from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib.ticker import FuncFormatter
 
-from DataSource import DataSource
-from Models.SimulationResult import SimulationResult
-from Models.SimulatorProperties import SimulatorProperties
+from AI.DataSource import DataSource
+from AI.Models.SimulationResult import SimulationResult
+from AI.Models.SimulatorProperties import SimulatorProperties
 
 
 class Plotter:
