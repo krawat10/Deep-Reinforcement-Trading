@@ -1,0 +1,7 @@
+.env
+results_*
+good_results_*
+__pycache__*
+assets.h5
+data/*
+.idea*
