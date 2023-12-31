@@ -12,7 +12,7 @@ tensorflow==2.9.1
 protobuf==3.9.2
 tensorflow_addons==0.17.1
 typeguard==2.13.3
-alpaca-py
+alpaca-py==0.8.2
 
 keras~=2.9.0
 scikit-learn~=1.1.2
